@@ -5,6 +5,7 @@ Thư mục này gom toàn bộ tài liệu hướng dẫn và quy định của 
 ## Tiến trình và quy định
 
 - [SETUP.md](SETUP.md): cài đặt, Langfuse và smoke test.
+- [RECOVERY_GUIDE.md](RECOVERY_GUIDE.md): tiến độ repo hiện tại, phần chưa xác minh và các bước tiếp tục.
 - [CHECKPOINTS.md](CHECKPOINTS.md): timeline 9:00–13:00 (240 phút) và tín hiệu hoàn thành.
 - [RUBRIC.md](RUBRIC.md): tiêu chí, điểm và evidence.
 - [RULES.md](RULES.md): AI policy, bảo mật, challenge và deadline.
@@ -14,6 +15,8 @@ Thư mục này gom toàn bộ tài liệu hướng dẫn và quy định của 
 
 - [GUIDE.md](GUIDE.md): gỡ lỗi theo từng lớp tín hiệu.
 - [PROMPT_VERSIONING.md](PROMPT_VERSIONING.md): prompt version, label và rollback.
+- [LANGFUSE_HANDOFF.md](LANGFUSE_HANDOFF.md): quy trình đầy đủ cho trace, prompt version và rollback trên Langfuse.
+- [COMPLETION_CHECKLIST.md](COMPLETION_CHECKLIST.md): file cần hoàn thiện, evidence và cách điền report cá nhân.
 - [DASHBOARD_SETUP.md](DASHBOARD_SETUP.md): dựng dashboard từ log contract.
 - [dashboard-spec.md](dashboard-spec.md): yêu cầu trình bày sáu panel.
 - [alerts.md](alerts.md): mẫu alert và runbook.

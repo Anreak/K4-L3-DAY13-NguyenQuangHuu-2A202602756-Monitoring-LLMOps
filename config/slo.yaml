@@ -7,7 +7,8 @@ primary_slo:
     total_event: 'event == "request_received"'
   target_percent: 99.5
   error_budget_percent: 0.5
-  note: Học viên phải giải thích hoặc điều chỉnh ngưỡng bằng baseline của mình. Ví dụ nếu có 10,000 request trong cửa sổ 28 ngày, error budget 0.5% nghĩa là tối đa 50 request được phép không đạt SLO.
+  error_budget_requests_per_10000: 50
+  note: Với mục tiêu 99.5%, error budget là 0.5%. Trên 10,000 request trong cửa sổ 28 ngày, tối đa 50 request được phép vượt latency 3 giây hoặc lỗi. Baseline CP1 còn nhỏ (11 request), nên ngưỡng 3 giây được giữ theo lab và cần hiệu chỉnh khi có traffic production.
 guardrails:
   error_rate_pct_max: 2
   daily_cost_usd_max: 2.5
