@@ -8,7 +8,7 @@
 - **MSSV:** 2A202602756
 - **Lớp:** K4-L3B
 - **Repository URL:** https://github.com/Anreak/K4-L3-DAY13-NguyenQuangHuu-2A202602756-Monitoring-LLMOps
-- **Commit SHA cuối:** Chưa tạo; điền SHA của commit cuối sau khi cập nhật report và evidence.
+- **Commit SHA:** `74573328ca168093d14a3161cf4d98545d29c421`
 - **Challenge ID:** `day13-k4-l3b-monitoring-llmops-v1`
 - **Tên project Langfuse cá nhân:** `day13-k4-l3b-2A202602756` (xác nhận qua API project của credentials đang cấu hình).
 
@@ -28,23 +28,23 @@
 | Trace metadata | `evidence/08a.png` |
 | Generation model/token/cost | `evidence/08b.png` |
 | Prompt versions | `evidence/09-prompt-versions.png` |
-| Production v2 sau promote | `evidence/09-prompt-versions.png` (ảnh cho thấy v2 có label `production`) |
+| Production v2 sau promote | `evidence/10a.png` (v2 có label `production`) |
 | Production v1 sau rollback | `evidence/10b.png` |
 | Dashboard runtime | `evidence/11-dashboard-overview.png` |
-| Incident metric | `evidence/12-incident-metric.png` (ảnh hiện tại không chứa thời điểm challenge; cần thay bằng ảnh đúng) |
+| Incident metric | `evidence/12-incident-metric.png` (dashboard 06:40–07:39 UTC; chưa bao gồm challenge lúc khoảng 05:40 UTC, cần chụp lại đúng time range) |
 | Incident log | `evidence/13-incident-log.png` |
-| Incident trace | Chưa đạt: `evidence/14-incident-trace.png` là request khác correlation ID; cần thay bằng trace khớp ảnh 13 |
+| Incident trace | `evidence/14-incident-trace.png` (trace challenge, `correlation_id=req-24101db0`) |
 
 ## 3. Kết quả kỹ thuật
 
 | Nội dung | Baseline | Kết quả cuối | Nhận xét |
 |---|---|---|---|
 | `validate_logs.py` | Chưa ghi baseline | 100/100; 293 records, 129 correlation IDs | 0 trường thiếu, 0 context enrichment thiếu, 0 leak PII |
-| `validate_dashboard.py` | Chưa ghi baseline | 6/6 panel | Contract hợp lệ; runtime ở ảnh 11; ảnh metric incident 12 cần chụp lại đúng time range |
+| `validate_dashboard.py` | Chưa ghi baseline | 6/6 panel | Contract hợp lệ; runtime ở ảnh 11; ảnh 12 cần chụp lại đúng time range của challenge |
 | `pytest` | Chưa ghi baseline | 26 passed | Ảnh terminal: `evidence/01-pytest.png` |
 | Số traces hợp lệ | Chưa ghi baseline | Tối thiểu 36 root traces / 108 observations đã xác minh trước đó | Ảnh trace list hiện hiển thị 104 root observations trong khoảng thời gian đang chọn |
 | Số PII leak | Chưa ghi baseline | 0 theo log validator | Smoke test local cũng xác nhận mẫu email/điện thoại/thẻ đã scrub |
-| Latency P95 / TTFT P95 | Chưa ghi baseline riêng | Dashboard overview: P95 1,451 ms, TTFT P95 51 ms; challenge: 5/5 request 2,653–2,656 ms | Challenge median 2,654 ms vượt ngưỡng 2,000 ms; ảnh dashboard 12 hiện có chưa nằm trong challenge time range |
+| Latency P95 / TTFT P95 | Chưa ghi baseline riêng | Dashboard overview: P95 1,451 ms, TTFT P95 51 ms; challenge: 5/5 request 2,653–2,656 ms | Challenge median 2,654 ms vượt ngưỡng 2,000 ms; ảnh dashboard 12 hiện tại chưa nằm trong challenge time range |
 | Retrieval success rate | Chưa ghi baseline | 100% (5/5 challenge request) | Cả năm log `response_sent` đều có `tool_success=true`; retrieval bị chậm nhưng không lỗi |
 
 ## 4. Logging và PII
@@ -63,7 +63,7 @@
 - **Version/label baseline:** Version 1 / `baseline`; đã xác minh trên trace Langfuse.
 - **Version/label candidate:** Version 2 / `candidate`; đã tạo 10 request và Langfuse trả 10 root traces với `prompt_source=langfuse`.
 - **Trace ID của mỗi version:** Baseline v1: `8673ac582d602ab117129cd72eec65d6`, correlation `req-24101db0`; candidate v2: `3429cd635c5d3eca348722f8a8c9ade7`, correlation `req-a80d7722`; production v2: `f56ab203e00fceff172000d47a3d06cf`, correlation `req-ff29a25e`; production v1 sau rollback: `381a0be50c4f2d22b3bd10f71bea2e34`, correlation `req-4fcce137`. Các ID đã được xác minh trước đó qua Langfuse API.
-- **Cách promote và rollback `production`:** Đã chuyển `production` sang version 2, sau đó rollback về version 1. `evidence/09-prompt-versions.png` cho thấy trạng thái v2 có `production` (sau promote); `evidence/10b.png` cho thấy sau rollback, v1 có `production` và v2 còn `candidate`. Không dùng `evidence/10a.png` vì file ảnh hiện tại đen/trống.
+- **Cách promote và rollback `production`:** Đã chuyển `production` sang version 2, sau đó rollback về version 1. `evidence/10a.png` cho thấy trạng thái v2 có `production` (sau promote); `evidence/10b.png` cho thấy sau rollback, v1 có `production` và v2 còn `candidate`.
 
 ## 6. Dashboard, SLO và alerts
 
@@ -80,7 +80,7 @@
 - **Khoảng thời gian điều tra:** 2026-09-30 05:40:20–05:40:33 UTC (12:40:20–12:40:33 giờ Việt Nam), theo log challenge trong `evidence/13-incident-log.png`.
 - **Triệu chứng từ metrics:** 5/5 request challenge thành công; latency 2,653–2,656 ms, median 2,654 ms; vượt ngưỡng challenge 2,000 ms. TTFT khoảng 50 ms.
 - **Log line và correlation ID liên quan:** Ảnh `evidence/13-incident-log.png` hiển thị năm correlation ID challenge: `req-dfbf3b18`, `req-e626e9fa`, `req-24101db0`, `req-ceaaa4f1`, `req-fbc5f6ed`.
-- **Trace ID và span gây ảnh hưởng:** Trace challenge đã xác minh trước đó là `8673ac582d602ab117129cd72eec65d6`, correlation `req-24101db0`; root `38ac69e6708f3e83`, retrieval `8565a0999def3e6e`, generation `0a6d1a2f0a46a497`. Tuy nhiên ảnh `evidence/14-incident-trace.png` hiện là request `req-d139ce29` (`demo-01`), có `prompt_source=local-fallback` và không thấy child span retrieval/generation; ảnh này **không chứng minh trace challenge**.
+- **Trace ID và span gây ảnh hưởng:** Trace challenge `8673ac582d602ab117129cd72eec65d6`, correlation `req-24101db0`; ảnh `evidence/14-incident-trace.png` hiển thị root `lab-agent-run` (2.65 giây), child `retrieval` (2.50 giây) và `generation` (0.15 giây), cùng metadata `session_id=k4-l3b-challenge-s01`, `prompt_source=langfuse`, prompt version 1 / `baseline`. Đây là bằng chứng trace cho thấy retrieval gây phần lớn độ trễ.
 - **Root cause:** `rag_slow` cố ý chèn `time.sleep(2.5)` trong `app/mock_rag.py` retrieval; phần generation chỉ khoảng 150 ms.
 - **Fix action:** Gọi endpoint disable incident; health sau chạy xác nhận `rag_slow=false`.
 - **Preventive measure:** Giữ cảnh báo latency P95, điều tra theo Metrics → Logs → Traces, và luôn xác nhận incident đã disable sau workload.
